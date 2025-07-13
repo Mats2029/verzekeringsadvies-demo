@@ -89,47 +89,56 @@ if st.button("Toon advies voor cyberverzekeringen"):
     # HTML-tabel genereren
     html = """
     <style>
-    .table-style {
-        font-family: Arial, sans-serif;
+    .table-clean {
+        font-family: 'Segoe UI', sans-serif;
         border-collapse: collapse;
         width: 100%;
+        margin-top: 1rem;
     }
-    .table-style th {
-        background-color: #f2f2f2;
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-    .table-style td {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-    }
-    .table-style tr:hover {
+    .table-clean th {
         background-color: #f9f9f9;
+        padding: 12px 10px;
+        text-align: left;
+        font-size: 15px;
+        color: #333;
+    }
+    .table-clean td {
+        padding: 10px;
+        font-size: 14px;
+        color: #222;
+        border-bottom: none;
+    }
+    .table-clean tr {
+        background-color: #fff;
+    }
+    .table-clean tr:hover {
+        background-color: #f1f7ff;
     }
     .match-bar {
-        background: #e0e0e0;
-        border-radius: 3px;
+        background: #e5eefe;
+        border-radius: 4px;
         overflow: hidden;
         height: 18px;
+        width: 100%;
     }
     .match-bar-fill {
         height: 100%;
-        background-color: #4CAF50;
+        background-color: #1f77d0;
         text-align: center;
         color: white;
         font-size: 12px;
+        line-height: 18px;
     }
     </style>
-    <h3>2. Cyberverzekering – op maat gesorteerd</h3>
-    <table class="table-style">
+    <h3 style="margin-top: 30px;">2. Cyberverzekering – op maat gesorteerd</h3>
+    <table class="table-clean">
     <thead>
     <tr>
         <th>Verzekeraar</th>
         <th>Dekkingsniveau</th>
         <th>Snelle afhandeling</th>
         <th>Prijsniveau</th>
-        <th>Match met jouw profiel</th>
+        <th>Match</th>
     </tr>
     </thead>
     <tbody>
