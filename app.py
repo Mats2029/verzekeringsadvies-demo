@@ -1,8 +1,7 @@
 
 import streamlit as st
-import pandas as pd
 
-# Gebruikersinvoer
+# Gebruikersinput
 st.title("AI-verzekeringsadvies voor ICT-bedrijven")
 
 st.header("1. Bedrijfsgegevens invullen")
@@ -73,19 +72,85 @@ def bereken_match(verzekeraar, profiel):
         score += 1
     return round((score / max_score) * 100)
 
-# Vergelijkingstabel op basis van input
+# Cyberverzekering advies tonen
 if st.button("Toon advies voor cyberverzekeringen"):
     resultaten = []
     for v in verzekeraars:
         match = bereken_match(v, profiel)
         resultaten.append({
-            "Verzekeraar": v["naam"],
-            "Dekkingsniveau": "Hoog" if v["dekking_hoog"] else "Basis",
-            "Snelle afhandeling": "Ja" if v["snelle_afhandeling"] else "Nee",
-            "Prijsniveau": v["prijsniveau"].capitalize(),
-            "Match met jouw profiel (%)": match
+            "naam": v["naam"],
+            "dekking": "Hoog" if v["dekking_hoog"] else "Basis",
+            "snel": "Ja" if v["snelle_afhandeling"] else "Nee",
+            "prijs": v["prijsniveau"].capitalize(),
+            "match": match
         })
-    df_resultaten = pd.DataFrame(resultaten)
-    df_resultaten = df_resultaten.sort_values(by="Match met jouw profiel (%)", ascending=False)
-    st.header("2. Cyberverzekering – op maat gesorteerd")
-    st.dataframe(df_resultaten, use_container_width=True)
+    resultaten = sorted(resultaten, key=lambda x: x["match"], reverse=True)
+
+    # HTML-tabel genereren
+    html = """
+    <style>
+    .table-style {
+        font-family: Arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+    .table-style th {
+        background-color: #f2f2f2;
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    .table-style td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+    .table-style tr:hover {
+        background-color: #f9f9f9;
+    }
+    .match-bar {
+        background: #e0e0e0;
+        border-radius: 3px;
+        overflow: hidden;
+        height: 18px;
+    }
+    .match-bar-fill {
+        height: 100%;
+        background-color: #4CAF50;
+        text-align: center;
+        color: white;
+        font-size: 12px;
+    }
+    </style>
+    <h3>2. Cyberverzekering – op maat gesorteerd</h3>
+    <table class="table-style">
+    <thead>
+    <tr>
+        <th>Verzekeraar</th>
+        <th>Dekkingsniveau</th>
+        <th>Snelle afhandeling</th>
+        <th>Prijsniveau</th>
+        <th>Match met jouw profiel</th>
+    </tr>
+    </thead>
+    <tbody>
+    """
+
+    for r in resultaten:
+        bar_width = r["match"]
+        html += f"""
+        <tr>
+            <td>{r['naam']}</td>
+            <td>{r['dekking']}</td>
+            <td>{r['snel']}</td>
+            <td>{r['prijs']}</td>
+            <td>
+                <div class="match-bar">
+                    <div class="match-bar-fill" style="width:{bar_width}%;">{bar_width}%</div>
+                </div>
+            </td>
+        </tr>
+        """
+
+    html += "</tbody></table>"
+
+    st.markdown(html, unsafe_allow_html=True)
